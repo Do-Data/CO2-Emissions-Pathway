@@ -1,8 +1,39 @@
 <!DOCTYPE html>
 <html>
 <head>
+<!-- Favicon -->
 <link rel="icon" type="image/png" href="favicon.png">
 <link rel="shortcut icon" type="image/png" href="favicon.png">
+
+<!-- Metadata -->
+<meta name="author" content="Gitte Alberen, Vejle Erhverv">
+<meta name="designer" content="Gitte Alberen, Vejle Erhverv">
+<meta name="created" content="2025-10-31">
+<meta name="modified" content="2025-10-31">
+<meta name="publisher" content="Vejle Municipality / Vejle Erhverv">
+<meta name="copyright" content="Vejle Municipality">
+
+<meta name="description" content="An interactive pathway for CO₂ emissions monitoring and climate action co-developed under the Interreg North Sea Region 'Data for All' programme. Designed by Vejle Erhverv as an example of municipal–RTO–SME collaboration.">
+
+<!-- SEO -->
+<meta name="keywords" content="Do Data, CO2, emissions monitoring, climate action, Interreg, Data for All, Vejle Erhverv, municipal climate data, climate insights, SMEs, RTO collaboration, Climate Compass, Klimakompasset">
+
+<!-- Social (OpenGraph) -->
+<meta property="og:title" content="CO₂ Emissions Monitoring Pathway – Do Data for a Greener Future">
+<meta property="og:description" content="A structured learning pathway for municipalities, SMEs and technical partners working with climate data solutions under the Interreg Data for All programme.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://do-data.github.io/CO2-Emissions-Pathway/">
+<meta property="og:image" content="https://do-data.github.io/CO2-Emissions-Pathway/og-preview.png">
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="CO₂ Emissions Monitoring Pathway – Do Data">
+<meta name="twitter:description" content="A practical, structured pathway for developing or continuing climate data solutions like Do Data.">
+<meta name="twitter:image" content="https://do-data.github.io/CO2-Emissions-Pathway/og-preview.png">
+
+<!-- Responsive -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <meta charset="utf-8">
 <meta content="width=device-width, initial-scale=1" name="viewport">
 <title>CO₂ Emissions Monitoring Solution Pathway</title>
@@ -79,20 +110,192 @@ tw-passage::after {
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center bottom;
-
     pointer-events: none;
 }
+/* === SLIDE-OUT LINK PANEL (ALLE PASSAGER) ===================== */
 
-/* Links */
-tw-link {
+.link-panel {
+    position: fixed;
+    right: 0;
+    bottom: 20px;
+    z-index: 9000;
+    font-family: 'Source Sans Pro', sans-serif;
+    pointer-events: none;      /* så panelet ikke blokerer klik bagved */
+}
+
+/* selve kassen med links */
+.link-panel-inner {
+    background: rgba(255,255,255,0.95);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.20);
+    border-radius: 10px 0 0 10px;
+    padding: 14px 18px;
+    width: 190px;
+    max-width: 80vw;
+    pointer-events: auto;
+    transition: transform 0.25s ease-out, opacity 0.2s ease-out;
+}
+
+/* links i boksen */
+.link-panel-inner a {
+    display: block;
+    font-size: 0.9rem;
+    text-decoration: none;
+    margin-bottom: 6px;
+}
+
+/* “Links”-fanen ude i kanten */
+.link-tab {
+    position: absolute;
+    left: -72px;               /* hvor langt fanen stikker ud */
+    top: 50%;
+    transform: translateY(-50%);
+    width: 72px;
+    height: 96px;
+    background: #0a96ab;       /* lukket farve */
+    color: #ffffff;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    pointer-events: auto;
+    font-size: 0.9rem;
+    letter-spacing: 0.03em;
+    text-align: center;
+    line-height: 1.1;
+    border-radius: 6px 0 0 6px;
+    box-shadow: -2px 4px 10px rgba(0,0,0,0.25);
+}
+
+/* teksten roteres, så den står lodret */
+.link-tab-label {
+    font-weight: 550;
+    letter-spacing: 0.06em;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-90deg);
+    transform-origin: center;
+}
+
+/* trekant-pil for enden af fanen (lukket standardfarve) */
+.link-tab::after {
+    content: "";
+    position: absolute;
+    right: -18px;
+    top: 0;
+    width: 0;
+    height: 0;
+    border-top: 48px solid transparent;
+    border-bottom: 48px solid transparent;
+    border-left: 18px solid #0a96ab;
+}
+
+/* lukket/åben tilstand */
+.link-panel.collapsed .link-panel-inner {
+    transform: translateX(100%);
+    opacity: 0;
+    pointer-events: none;
+}
+.link-panel.open .link-panel-inner {
+    transform: translateX(0%);
+    opacity: 1;
+}
+
+/* pil-rotation (vi bruger bare trekanten) */
+.link-tab-arrow {
+    display: none;
+}
+
+/* NÅR panelet er åbent – brug mørk blå på både fane og pil */
+.link-panel.open .link-tab {
+    background: #2f347b;
+}
+.link-panel.open .link-tab::after {
+    border-left-color: #2f347b;
+}
+
+/* MOBIL-tilpasning */
+@media (max-width: 600px) {
+    .link-panel {
+        bottom: 20px;
+    }
+    .link-panel-inner {
+        width: 190px;
+        padding: 10px 14px;
+        font-size: 0.85rem;
+    }
+    .link-tab {
+        height: 80px;
+    }
+    .link-tab::after {
+        border-top: 40px solid transparent;
+        border-bottom: 40px solid transparent;
+        /* farven styres stadig af reglerne ovenfor */
+    }
+}
+
+/* === ENSRETTEDE LINKFARVER (TWINE + PANEL) ===================== */
+/* Mål:
+   - Standard: #089897
+   - Hover/active: #2f347b
+   - Visited: #2f347b (mørk blå)
+*/
+
+/* Links i selve Twine-teksten */
+tw-link,
+tw-link:link,
+tw-link:visited {
+    color: #089897 !important;
+    font-weight: 700;
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+}
+
+tw-link:hover,
+tw-link:active {
+    color: #2f347b !important;
+    border-bottom-color: #2f347b;
+}
+
+/* Twines .visited-klasse (overstyr standard lilla/pink) */
+.visited,
+.visited tw-link,
+tw-link.visited {
+    color: #2f347b !important;
+}
+
+.visited:hover,
+.visited tw-link:hover,
+tw-link.visited:hover {
+    color: #2f347b !important;
+}
+
+/* Links i link-panelet */
+.link-panel-inner a:link,
+.link-panel-inner a:visited {
     color: #089897;
     font-weight: 700;
+    text-decoration: none;
 }
-tw-link:hover {
+
+.link-panel-inner a:hover,
+.link-panel-inner a:active {
+    color: #2f347b;
+    text-decoration: underline;
+}
+
+/* Almindelige HTML-links (fallback, fx hvis du senere tilføjer andre <a>) */
+a {
+    color: #089897;
+}
+a:hover,
+a:active {
+    color: #2f347b;
+}
+a:visited {
     color: #2f347b;
 }
 
-/* Pile */
+/* Pile (Twine icons) */
 tw-icon,
 tw-icon-back {
     color: #2f347b !important;
@@ -100,7 +303,8 @@ tw-icon-back {
 tw-icon:hover,
 tw-icon-back:hover {
     color: #089897 !important;
-}</style><script role="script" id="twine-user-script" type="text/twine-javascript">/* === Scroll to top on passage change === */
+}
+</style><script role="script" id="twine-user-script" type="text/twine-javascript">/* === Scroll to top on passage change === */
 (function () {
     function scrollToTop() {
         window.scrollTo(0, 0);
@@ -117,7 +321,54 @@ tw-icon-back:hover {
     if (storyEl) {
         observer.observe(storyEl, { childList: true });
     }
-})();</script><tw-passagedata pid="1" name="AboutClimateCompass" tags="" position="400,25" size="100,100">The **Climate Compass (Klimakompasset)** is a Danish climate accounting tool based on the international Greenhouse Gas (GHG) Protocol.
+})();
+
+
+(function () {
+  function createLinkPanel() {
+    if (document.getElementById("link-panel")) return;
+
+    var panel = document.createElement("div");
+    panel.id = "link-panel";
+    panel.className = "link-panel collapsed";
+    panel.innerHTML = `
+      <button class="link-tab" aria-expanded="false" aria-controls="link-panel-inner">
+        <span class="link-tab-label">Links</span>
+      </button>
+      <div id="link-panel-inner" class="link-panel-inner" role="navigation" aria-label="External links">
+        <a href="https://www.interregnorthsea.eu/dataforall" target="_blank" rel="noopener">
+          Data for All (Interreg)
+        </a>
+        <a href="https://www.vejle.dk/da/demokrati-og-udvikling/udvikling-af-vores-kommune/data-for-all/" target="_blank" rel="noopener">
+          Do Data pilot project (Danish)
+        </a>
+        <a href="https://klimakompasset.dk/klimakompasset/" target="_blank" rel="noopener">
+          The Climate Compass
+        </a>
+        <a href="https://notebooklm.google.com/notebook/1aa090b0-c182-4032-ab73-c5c1a9a2e5be" target="_blank" rel="noopener">
+          Learn about the Climate Compass (NotebookLM)
+        </a>
+      </div>
+    `;
+
+    document.body.appendChild(panel);
+
+    var tab = panel.querySelector(".link-tab");
+    tab.addEventListener("click", function () {
+      var isOpen = panel.classList.toggle("open");
+      panel.classList.toggle("collapsed", !isOpen);
+      tab.setAttribute("aria-expanded", isOpen ? "true" : "false");
+    });
+  }
+
+  // Twine (Harlowe/SugarCube) + almindelig HTML:
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", createLinkPanel);
+  } else {
+    createLinkPanel();
+  }
+})();
+</script><tw-passagedata pid="1" name="AboutClimateCompass" tags="" position="400,25" size="100,100">The **Climate Compass (Klimakompasset)** is a Danish climate accounting tool based on the international Greenhouse Gas (GHG) Protocol.
 
 In the original Do Data pilot, Climate Compass data was:
 - Collected from companies
@@ -144,6 +395,7 @@ This means:
 [[See national data requirements for adapting the method-&gt;NationalDataRequirements]]
 [[Go to municipality / public partner pathway-&gt;MunicipalityIntro]]
 [[Go to business / SME pathway-&gt;BusinessIntro]]
+
 [[Back to start-&gt;Start]]</tw-passagedata><tw-passagedata pid="2" name="AboutDoData" tags="" position="275,25" size="100,100">**Do Data – for a Greener Future** is one example of a climate and emissions data solution that:
 
 - Was co-developed between a **municipality**, a **technical development partner such as an RTO (Research and Technology Organisation – the Danish GTS system)**, and **local businesses**
@@ -158,12 +410,12 @@ In this learning tool, Do Data is used as a **reference case**:
 
 If your goal is to work with a solution in this family, then:
 
-- Use the **Roadmap** to understand phases and decisions.
+- Use the **[[Roadmap-&gt;RoadmapOverview]]** to understand phases and decisions.
 - Use the **[[Do Data Cook Book-&gt;DoDataCookBook]]** for practical, hands-on guidance on concrete tasks, governance and technical setup relating specifically to Do Data.
 
 [[Go to municipality / public partner pathway-&gt;MunicipalityIntro]]
 [[Go to business / SME pathway-&gt;BusinessIntro]]
-[[Learn about the [[Do Data Cook Book-&gt;DoDataCookBook]]-&gt;DoDataCookBook]]
+
 [[Back to start-&gt;Start]]</tw-passagedata><tw-passagedata pid="3" name="BusinessBenchmarking" tags="" position="150,275" size="100,100">Benchmarking and shared insights in a Do Data-like solution can help you:
 
 - Understand whether your emissions per unit (e.g. per employee, per turnover, per m²) are **high, medium or low** compared to similar companies
@@ -176,6 +428,7 @@ You can also:
 - Co-design new views or tools that support your **business decisions**
 
 [[Back to business start-&gt;BusinessIntro]]
+
 [[Back to start-&gt;Start]]</tw-passagedata><tw-passagedata pid="4" name="BusinessClimateCompassExplained" tags="" position="1025,150" size="100,100">The **Climate Compass** (or a similar tool) typically guides you through:
 
 - Direct emissions (Scope 1)
@@ -195,6 +448,7 @@ In a Do Data-like project:
 If your company is **outside Denmark**, national emission factors should be used so your results are accurate.
 
 [[How we might submit data into a Do Data-like solution-&gt;BusinessSubmittingData]]
+
 [[Back to business start-&gt;BusinessIntro]]
 
 [[Back to start-&gt;Start]]</tw-passagedata><tw-passagedata pid="5" name="BusinessIntro" tags="" position="775,150" size="100,100">You are exploring the pathway as a **business / SME** – a potential **end user and co-developer** of a Do Data-like solution.
@@ -216,6 +470,7 @@ Where are you in your climate and data journey?
 [[We are new to climate accounting-&gt;BusinessNew]]
 [[We already use the Climate Compass or a similar tool-&gt;BusinessUsingClimateCompass]]
 [[We mainly want benchmarking and insights-&gt;BusinessBenchmarking]]
+
 [[Back to start-&gt;Start]]</tw-passagedata><tw-passagedata pid="6" name="BusinessNew" tags="" position="900,150" size="100,100">You have little or no experience with climate accounting.
 
 If you want to participate in the development of a Do Data-like solution, your first step is to create a **basic climate inventory**.
@@ -234,6 +489,7 @@ The municipality, technical development partner or business network may help you
 
 [[How the Climate Compass (or similar) works-&gt;BusinessClimateCompassExplained]]
 [[How we might submit data into a Do Data-like solution-&gt;BusinessSubmittingData]]
+
 [[Back to business start-&gt;BusinessIntro]]
 
 [[Back to start-&gt;Start]]</tw-passagedata><tw-passagedata pid="7" name="BusinessSubmittingData" tags="" position="1150,150" size="100,100">Once you have created or updated your climate inventory, your data can be:
@@ -251,6 +507,7 @@ In a collaborative project with municipality and the technical development partn
 - You can help define what **you want in return** for sharing data (e.g. specific indicators, reports, or tools).
 
 [[What are the benefits of benchmarking and shared insights?-&gt;BusinessBenchmarking]]
+
 [[Back to business start-&gt;BusinessIntro]]
 
 [[Back to start-&gt;Start]]</tw-passagedata><tw-passagedata pid="8" name="BusinessUsingClimateCompass" tags="" position="25,275" size="100,100">You already use the **Climate Compass** or a similar climate accounting tool.
@@ -267,13 +524,14 @@ You gain:
 If your country is not Denmark, make sure your climate accounting uses **national or sector-specific emission factors**, so any benchmarks are meaningful.
 
 [[See benchmarking benefits-&gt;BusinessBenchmarking]]
+
 [[Back to business start-&gt;BusinessIntro]]
 
 [[Back to start-&gt;Start]]</tw-passagedata><tw-passagedata pid="9" name="DoDataCookBook" tags="" position="650,25" size="100,100">&#39;&#39;Do Data Cook Book — Recipes &amp; Checklists&#39;&#39;
 
 This Cook Book provides hands-on methods and ready-made “recipes” for building, running and scaling a Do Data-like solution. It is the practical counterpart to the roadmap and intro content in this guide.
 
-=== Recipe 1 — Create organisational readiness ===
+&#39;&#39;Recipe 1 - Create organisational readiness&#39;&#39;
 Goal: Ensure your organisation is ready to build or extend a Do Data-like solution.
 
 *Ingredients:*
@@ -296,7 +554,7 @@ Goal: Ensure your organisation is ready to build or extend a Do Data-like soluti
 - [ ] We have a project owner  
 - [ ] We have a technical partner or internal IT  
 
-=== Recipe 2 — Build the foundational data infrastructure ===
+&#39;&#39;Recipe 2 - Build the foundational data infrastructure&#39;&#39;
 Goal: Establish a minimum viable data pipeline.
 
 *Ingredients:*
@@ -320,7 +578,7 @@ Goal: Establish a minimum viable data pipeline.
 - [ ] We can generate basic analytics  
 - [ ] We can run the pipeline repeatedly  
 
-=== Recipe 3 — Build the MVP dashboard ===
+&#39;&#39;Recipe 3 - Build the MVP dashboard&#39;&#39;
 Goal: Enable core visualisation before full-scale development.
 
 *Ingredients:*
@@ -342,7 +600,7 @@ Goal: Enable core visualisation before full-scale development.
 - [ ] Users can navigate it  
 - [ ] The insights make sense to users  
 
-=== Recipe 4 — Start co-development with businesses ===
+&#39;&#39;Recipe 4 - Start co-development with businesses&#39;&#39;
 Goal: Work with businesses to shape the solution.
 
 *Ingredients:*
@@ -364,7 +622,7 @@ Goal: Work with businesses to shape the solution.
 - [ ] Feedback documented  
 - [ ] Feedback integrated in roadmap  
 
-=== Recipe 5 — Plan for scaling and collaboration ===
+&#39;&#39;Recipe 5 - Plan for scaling and collaboration&#39;&#39;
 Goal: Prepare the solution for use beyond the initial municipality.
 
 *Ingredients:*
@@ -406,6 +664,7 @@ For the practical steps of assessing readiness, you can:
 
 [[Develop a foundational readiness plan-&gt;MunicipalityReadinessPlan]]
 [[See technical and data-related requirements-&gt;MunicipalityTechnicalRequirements]]
+
 [[Back to municipality start-&gt;MunicipalityIntro]]
 
 [[Back to start-&gt;Start]]</tw-passagedata><tw-passagedata pid="11" name="MunicipalityEngagingBusinesses" tags="" position="400,150" size="100,100">As a municipality or region, you are a **public partner** and **service provider** for local businesses.
@@ -426,6 +685,7 @@ If you lack internal capacity for engagement, consider:
 - The technical development partner as a facilitator or trainer
 
 [[We are ready to scale or deepen a Do Data-like solution to more businesses-&gt;MunicipalityScaling]]
+
 [[Back to municipality start-&gt;MunicipalityIntro]]
 
 [[Back to start-&gt;Start]]</tw-passagedata><tw-passagedata pid="12" name="MunicipalityEthicalLegal" tags="" position="275,150" size="100,100">A solution similar to Do Data is designed so that **municipalities mainly see aggregated data**, not detailed company-level emissions in a way that enables direct ranking or shaming.
@@ -447,6 +707,7 @@ The **[[Do Data Cook Book-&gt;DoDataCookBook]]** can point to typical legal and 
 
 [[Engaging and supporting local businesses as end users-&gt;MunicipalityEngagingBusinesses]]
 [[See overall roadmap-&gt;RoadmapOverview]]
+
 [[Back to municipality start-&gt;MunicipalityIntro]]
 
 [[Back to start-&gt;Start]]</tw-passagedata><tw-passagedata pid="13" name="MunicipalityExploring" tags="" position="900,25" size="100,100">At this stage, you are asking:  
@@ -464,6 +725,7 @@ If your digital and organisational capacity is unclear, start by assessing your 
 [[Assess our digital maturity and collaboration capacity-&gt;MunicipalityDigitalMaturity]]
 [[Reflect on organisational anchoring and partnership roles-&gt;MunicipalityOrganisationalAnchoring]]
 [[See overall roadmap-&gt;RoadmapOverview]]
+
 [[Back to municipality start-&gt;MunicipalityIntro]]
 
 [[Back to start-&gt;Start]]</tw-passagedata><tw-passagedata pid="14" name="MunicipalityIntro" tags="" position="775,25" size="100,100">You are exploring the pathway as a **municipality or regional authority** – a *public partner* and potential **taker** of a solution like Do Data.
@@ -486,6 +748,7 @@ Where are you right now?
 [[We are preparing for concrete development / implementation-&gt;MunicipalityPreparing]]
 [[We already have a pilot and want to scale or deepen it-&gt;MunicipalityScaling]]
 [[See overall roadmap for a Do Data-like solution-&gt;RoadmapOverview]]
+
 [[Back to start-&gt;Start]]</tw-passagedata><tw-passagedata pid="15" name="MunicipalityOrganisationalAnchoring" tags="" position="150,150" size="100,100">Whether you continue Do Data or develop a similar solution, success depends on **clear roles and responsibilities** across partners.
 
 Typical roles:
@@ -512,6 +775,7 @@ If these roles are not clearly assigned, development and scaling of a Do Data-li
 
 [[Ethical and legal reflections-&gt;MunicipalityEthicalLegal]]
 [[Engaging and supporting local businesses as end users-&gt;MunicipalityEngagingBusinesses]]
+
 [[Back to municipality start-&gt;MunicipalityIntro]]
 
 [[Back to start-&gt;Start]]</tw-passagedata><tw-passagedata pid="16" name="MunicipalityPreparing" tags="" position="525,150" size="100,100">You are in a phase where you have decided that a Do Data-like solution is relevant, and you are preparing practical development and implementation with partners.
@@ -532,6 +796,7 @@ For the operational parts of this phase, the **[[Do Data Cook Book-&gt;DoDataCoo
 [[Check technical requirements-&gt;MunicipalityTechnicalRequirements]]
 [[Plan engagement with businesses-&gt;MunicipalityEngagingBusinesses]]
 [[See overall roadmap-&gt;RoadmapOverview]]
+
 [[Back to municipality start-&gt;MunicipalityIntro]]
 
 [[Back to start-&gt;Start]]</tw-passagedata><tw-passagedata pid="17" name="MunicipalityReadinessPlan" tags="" position="1150,25" size="100,100">A **foundational readiness plan** helps you decide whether and how to:
@@ -565,6 +830,7 @@ For concrete examples of documents and workflows, you can refer to the **[[Do Da
 
 [[See technical implementation requirements-&gt;MunicipalityTechnicalRequirements]]
 [[Reflect on organisational anchoring and partnership roles-&gt;MunicipalityOrganisationalAnchoring]]
+
 [[Back to municipality start-&gt;MunicipalityIntro]]
 
 [[Back to start-&gt;Start]]</tw-passagedata><tw-passagedata pid="18" name="MunicipalityScaling" tags="" position="650,150" size="100,100">You already have a pilot or a first version and now want to **scale or deepen** a Do Data-like solution.
@@ -588,7 +854,9 @@ The **[[Do Data Cook Book-&gt;DoDataCookBook]]** can support this phase with:
 - Example governance for multi-municipal setups
 
 [[See overall roadmap-&gt;RoadmapOverview]]
+
 [[Back to municipality start-&gt;MunicipalityIntro]]
+
 [[Back to start-&gt;Start]]</tw-passagedata><tw-passagedata pid="19" name="MunicipalityTechnicalRequirements" tags="" position="25,150" size="100,100">If you want to develop a solution similar to Do Data or continue Do Data, your technical environment should be able to:
 
 - Host the open-source **frontend and backend**, or work with a hosting partner
@@ -610,6 +878,7 @@ The **[[Do Data Cook Book-&gt;DoDataCookBook]]** can provide more detailed guida
 
 [[Organisational anchoring and partnership roles-&gt;MunicipalityOrganisationalAnchoring]]
 [[Ethical and legal reflections-&gt;MunicipalityEthicalLegal]]
+
 [[Back to municipality start-&gt;MunicipalityIntro]]
 
 [[Back to start-&gt;Start]]</tw-passagedata><tw-passagedata pid="20" name="NationalDataRequirements" tags="" position="525,25" size="100,100">If you want to develop a solution similar to Do Data, or continue the development of Do Data in another country or region, you should adapt the underlying emissions data.
@@ -631,7 +900,9 @@ Typical national/regional data sources include:
 With these adaptations, the **structure** of Climate Compass-style accounting and the **visualisation approach** used by Do Data remain relevant and useful across EU regions.
 
 [[Back to Climate Compass overview-&gt;AboutClimateCompass]]
-[[Back to start-&gt;Start]]</tw-passagedata><tw-passagedata pid="21" name="RoadmapOverview" tags="" position="275,275" size="100,100">If you want to develop a solution similar to Do Data, or continue the development of Do Data, you can think in terms of **seven steps**:
+
+[[Back to start-&gt;Start]]</tw-passagedata><tw-passagedata pid="21" name="RoadmapOverview" tags="" position="275,275" size="100,100">**Do Data Roadmap Overview**
+If you want to develop a solution similar to Do Data, or continue the development of Do Data, you can think in terms of **seven steps**:
 
 1. **Foundations**  
    Climate strategy, climate action plans, and basic understanding of climate and emissions data, including the Climate Compass or similar tools.
@@ -665,6 +936,7 @@ Choose a step to explore further:
 [[Step 5 – Onboarding Businesses and End Users-&gt;RoadmapStep5]]
 [[Step 6 – Scaling and Wider Collaboration-&gt;RoadmapStep6]]
 [[Step 7 – Continuous Improvement and Learning-&gt;RoadmapStep7]]
+
 [[Back to start-&gt;Start]]</tw-passagedata><tw-passagedata pid="22" name="RoadmapStep1" tags="" position="400,275" size="100,100">**Step 1 – Foundations**
 
 Key questions:
@@ -678,6 +950,8 @@ A Do Data-like solution supports these foundations by:
 - Showing where local climate action can have the biggest effect
 
 For concrete examples of how Do Data approached this step, you can look into the **[[Do Data Cook Book-&gt;DoDataCookBook]]**.
+
+Continue to next step: [[Step 2 – Data Infrastructure-&gt;RoadmapStep2]]
 
 [[Back to roadmap overview-&gt;RoadmapOverview]]
 
@@ -694,7 +968,11 @@ In a Do Data-like project:
 - The technical development partner often plays a key role in designing the **data model** and **pipelines**.
 - The municipality defines which **insights** are needed for climate planning.
 
-For more operational guidance on data flows and formats, see the **[[Do Data Cook Book-&gt;DoDataCookBook]]**.
+For more operational guidance on data flows and formats, see the **[[Do Data Cook 
+Book-&gt;DoDataCookBook]]**.
+
+Continue to next step: [[Step 3 – Governance and Partnership Model-&gt;RoadmapStep3]]
+Go back to previous step: [[Step 1 – Foundations-&gt;RoadmapStep1]]
 
 [[Back to roadmap overview-&gt;RoadmapOverview]]
 
@@ -715,6 +993,9 @@ A strong partnership model makes a Do Data-like solution:
 - Attractive to new partners and regions
 
 The **[[Do Data Cook Book-&gt;DoDataCookBook]]** can include example governance models and meeting structures that worked in the original project.
+
+Continue to next step: [[Step 4 – Technical Setup and Architecture-&gt;RoadmapStep4]]
+Go back to previous step: [[Step 2 – Data Infrastructure-&gt;RoadmapStep2]]
 
 [[Back to roadmap overview-&gt;RoadmapOverview]]
 
@@ -737,6 +1018,9 @@ The **[[Do Data Cook Book-&gt;DoDataCookBook]]** can provide:
 - Typical technology choices
 - Lessons learned from implementation.
 
+Continue to next step: [[Step 5 – Onboarding Businesses and End Users-&gt;RoadmapStep5]]
+Go back to previous step: [[Step 3 – Governance and Partnership Model-&gt;RoadmapStep3]]
+
 [[Back to roadmap overview-&gt;RoadmapOverview]]
 
 [[Back to start-&gt;Start]]</tw-passagedata><tw-passagedata pid="26" name="RoadmapStep5" tags="" position="900,275" size="100,100">**Step 5 – Onboarding Businesses and End Users**
@@ -756,6 +1040,9 @@ The **[[Do Data Cook Book-&gt;DoDataCookBook]]** can suggest:
 - Workshop formats
 - Communication materials
 - Example onboarding journeys.
+
+Continue to next step: [[Step 6 – Scaling and Wider Collaboration-&gt;RoadmapStep6]]
+Go back to previous step: [[Step 4 – Technical Setup and Architecture-&gt;RoadmapStep4]]
 
 [[Back to roadmap overview-&gt;RoadmapOverview]]
 
@@ -777,6 +1064,9 @@ The **[[Do Data Cook Book-&gt;DoDataCookBook]]** can include:
 - Collaboration models between multiple municipalities and technical development partners
 - Suggestions for national or EU-level alignment.
 
+Continue to next step: [[Step 7 – Continuous Improvement and Learning-&gt;RoadmapStep7]]
+Go back to previous step: [[Step 5 – Onboarding Businesses and End Users-&gt;RoadmapStep5]]
+
 [[Back to roadmap overview-&gt;RoadmapOverview]]
 
 [[Back to start-&gt;Start]]</tw-passagedata><tw-passagedata pid="28" name="RoadmapStep7" tags="" position="1150,275" size="100,100">**Step 7 – Continuous Improvement and Learning**
@@ -794,6 +1084,8 @@ The **[[Do Data Cook Book-&gt;DoDataCookBook]]** can help you:
 - Structure retrospectives and learning loops
 - Capture experiences
 - Plan the next iteration of your solution.
+
+Go back to previous step: [[Step 6 – Scaling and Wider Collaboration-&gt;RoadmapStep6]]
 
 [[Back to roadmap overview-&gt;RoadmapOverview]]
 
