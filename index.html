@@ -38,6 +38,15 @@
 </style>
 </head>
 <body>
+<div class="print-controls">
+    <button class="print-button" type="button" aria-label="Print denne side" id="printButton">
+        <svg class="print-icon" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path fill="currentColor" d="M7 3h10a1 1 0 0 1 1 1v4h-2V5H8v3H6V4a1 1 0 0 1 1-1Zm12 8a2 2 0 0 1 2 2v5a1 1 0 0 1-1 1h-3v-3H7v3H4a1 1 0 0 1-1-1v-5a2 2 0 0 1 2-2h14Zm-3 6v-3H8v3h8Zm0-7a1 1 0 1 0 1 1a1 1 0 0 0-1-1Z"/>
+        </svg>
+        <span class="print-label">Print</span>
+    </button>
+    <div class="print-url">https://do-data.github.io/CO2-Emissions-Pathway/</div>
+</div>
 <tw-story><noscript><tw-noscript>JavaScript needs to be enabled to play CO₂ Emissions Monitoring Solution Pathway.</tw-noscript></noscript></tw-story>
 <tw-storydata name="CO₂ Emissions Monitoring Solution Pathway" startnode="29" creator="Twine" creator-version="2.11.1" format="Harlowe" format-version="3.3.9" ifid="6B7C98B8-29A6-4E5E-ADBA-96936E961B98" options="" tags="" zoom="1" hidden><style role="stylesheet" id="twine-user-stylesheet" type="text/twine-css">@import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400;600;700&display=swap');
 
@@ -75,6 +84,69 @@ tw-passage {
     box-sizing: border-box;
     position: relative;
     display: block;
+}
+
+/* ============================================
+   PRINT CONTROLS
+   ============================================ */
+.print-controls {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    z-index: 110;
+    pointer-events: none;
+}
+
+.print-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #2f347b;
+    color: #ffffff;
+    border: none;
+    border-radius: 999px;
+    padding: 10px 14px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    cursor: pointer;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.18);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+    pointer-events: auto;
+}
+
+.print-button:hover {
+    transform: translateY(-1px);
+    background: #3e4496;
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.2);
+}
+
+.print-icon {
+    display: block;
+}
+
+.print-label {
+    font-size: 0.95rem;
+}
+
+.print-url {
+    display: none;
+    padding: 8px 12px;
+    background: rgba(255, 255, 255, 0.96);
+    border: 1px solid #d7dde0;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    color: #00303c;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.14);
+    pointer-events: none;
+}
+
+@media (max-width: 900px) {
+    .print-controls {
+        display: none;
+    }
 }
 
 /* ============================================
@@ -495,6 +567,60 @@ tw-icon-back:hover {
 }
 
 /* ============================================
+   PRINT LAYOUT
+   ============================================ */
+@media print {
+    html, body {
+        height: auto !important;
+        overflow: visible !important;
+    }
+
+    tw-story {
+        height: auto !important;
+        overflow: visible !important;
+        padding-bottom: 0 !important;
+        background: #ffffff !important;
+    }
+
+    tw-passage {
+        padding: 40px 24px 24px;
+        max-width: 900px;
+    }
+
+    tw-passage::before {
+        position: static;
+        transform: none;
+        width: 100%;
+        max-width: none;
+        padding: 0;
+        height: auto;
+        background-position: left center;
+        background-size: contain;
+        margin-bottom: 16px;
+    }
+
+    tw-passage::after,
+    .link-panel,
+    .link-tab,
+    #google_translate_element,
+    .translate-btn {
+        display: none !important;
+    }
+
+    .print-controls {
+        position: static;
+        display: block;
+        width: 100%;
+        margin: 0 0 12px;
+        pointer-events: none;
+    }
+
+    .print-url {
+        display: inline-block;
+    }
+}
+
+/* ============================================
    METADATA
    Last updated: 2025-11-23 19:58:05 UTC
    Author: Do-Data
@@ -528,6 +654,49 @@ tw-icon-back:hover {
         subtree: true 
       });
     }
+  }
+
+  /* === Print-friendly layout === */
+  function initPrintSupport() {
+    const printButton = document.getElementById('printButton');
+    const storyElement = document.querySelector('tw-story');
+
+    const expandLayoutForPrint = function () {
+      document.documentElement.style.height = 'auto';
+      document.documentElement.style.overflow = 'visible';
+      document.body.style.height = 'auto';
+      document.body.style.overflow = 'visible';
+
+      if (storyElement) {
+        storyElement.style.height = 'auto';
+        storyElement.style.overflow = 'visible';
+      }
+    };
+
+    const restoreLayoutAfterPrint = function () {
+      document.documentElement.style.height = '';
+      document.documentElement.style.overflow = '';
+      document.body.style.height = '';
+      document.body.style.overflow = '';
+
+      if (storyElement) {
+        storyElement.style.height = '';
+        storyElement.style.overflow = '';
+      }
+    };
+
+    if (printButton) {
+      printButton.addEventListener('click', function () {
+        expandLayoutForPrint();
+        window.scrollTo({ top: 0, behavior: 'auto' });
+        setTimeout(function () {
+          window.print();
+        }, 20);
+      });
+    }
+
+    window.addEventListener('beforeprint', expandLayoutForPrint);
+    window.addEventListener('afterprint', restoreLayoutAfterPrint);
   }
 
   /* === Initialize Link Panel === */
@@ -615,6 +784,7 @@ tw-icon-back:hover {
   /* === Initialize when DOM is ready === */
   function init() {
     initScrollToTop();
+    initPrintSupport();
     createLinkPanel();
   }
 
