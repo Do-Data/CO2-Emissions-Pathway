@@ -38,6 +38,21 @@
 </style>
 </head>
 <body>
+<div class="print-controls">
+    <button
+        class="print-button"
+        type="button"
+        aria-label="Print page"
+        data-tooltip="Print page"
+        id="printButton"
+    >
+        <svg class="print-icon" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path fill="currentColor" d="M7 3h10a1 1 0 0 1 1 1v4h-2V5H8v3H6V4a1 1 0 0 1 1-1Zm12 8a2 2 0 0 1 2 2v5a1 1 0 0 1-1 1h-3v-3H7v3H4a1 1 0 0 1-1-1v-5a2 2 0 0 1 2-2h14Zm-3 6v-3H8v3h8Zm0-7a1 1 0 1 0 1 1a1 1 0 0 0-1-1Z"/>
+        </svg>
+    </button>
+    <div class="print-url">https://do-data.github.io/CO2-Emissions-Pathway/</div>
+</div>
+
 <tw-story><noscript><tw-noscript>JavaScript needs to be enabled to play CO₂ Emissions Monitoring Solution Pathway.</tw-noscript></noscript></tw-story>
 <tw-storydata name="CO₂ Emissions Monitoring Solution Pathway" startnode="29" creator="Twine" creator-version="2.11.1" format="Harlowe" format-version="3.3.9" ifid="6B7C98B8-29A6-4E5E-ADBA-96936E961B98" options="" tags="" zoom="1" hidden><style role="stylesheet" id="twine-user-stylesheet" type="text/twine-css">@import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400;600;700&display=swap');
 
@@ -75,6 +90,120 @@ tw-passage {
     box-sizing: border-box;
     position: relative;
     display: block;
+}
+
+/* ============================================
+   PRINT CONTROLS
+   ============================================ */
+.print-controls {
+    position: fixed;
+    bottom: 16px;
+    left: 16px;
+    display: flex;
+    align-items: center;
+    z-index: 110;
+    pointer-events: auto; /* ← SKAL være auto */
+}
+
+/* Kun blå printer-ikon, transparent baggrund */
+.print-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    background: transparent;
+    color: #2f347b;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    pointer-events: auto;
+    box-shadow: none;
+	pointer-events: auto;
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        background-color 0.2s ease,
+        color 0.2s ease;
+}
+
+.print-button:hover {
+    background-color: rgba(47, 52, 123, 0.08);
+    box-shadow: 0 0 0 2px rgba(47, 52, 123, 0.15);
+    transform: translateY(-1px);
+}
+
+.print-icon {
+    display: block;
+}
+/* ============================================
+   CUSTOM TOOLTIP
+   ============================================ */
+
+.print-button {
+    position: relative; /* Tooltip anker */
+}
+
+/* Tooltip-boksen */
+.print-button[data-tooltip]:hover::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: 110%;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 5px 10px;
+    background: rgba(47, 52, 123, 0.9);
+    color: #ffffff;
+
+    font-family: "Source Sans Pro", sans-serif; /* Samme font som resten */
+    font-size: 12px; /* Lidt mindre og mere diskret */
+
+    white-space: nowrap;
+    border-radius: 10px;
+    backdrop-filter: blur(4px);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.18s ease;
+    z-index: 9999;
+}
+
+/* Fade-in */
+.print-button[data-tooltip]:hover::after {
+    opacity: 1;
+}
+
+/* Den lille diamant-pil */
+.print-button[data-tooltip]:hover::before {
+    content: "";
+    position: absolute;
+    bottom: 96%;
+    left: 50%;
+    width: 7px;
+    height: 7px;
+    background: rgba(47, 52, 123, 0.9);
+    border-radius: 2px;
+    transform: translateX(-50%) rotate(45deg);
+    z-index: 9998;
+}
+
+
+.print-url {
+    display: none;
+    padding: 8px 12px;
+    background: rgba(255, 255, 255, 0.96);
+    border: 1px solid #d7dde0;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    color: #00303c;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.14);
+    pointer-events: none;
+}
+
+/* Stadig skjult på små skærme */
+@media (max-width: 900px) {
+    .print-controls {
+        display: none;
+    }
 }
 
 /* ============================================
@@ -127,7 +256,7 @@ tw-passage::after {
 }
 
 /* ============================================
-   LINK PANEL (Fixed Bottom Right, ABOVE Google Translate)
+   LINK PANEL (Fixed Bottom Right)
    ============================================ */
 .link-panel {
     position: fixed;
@@ -137,10 +266,18 @@ tw-passage::after {
     font-family: 'Source Sans Pro', sans-serif;
     pointer-events: none;
     width: auto;
-    height: 180px;
+    height: 160px;
     display: flex;
     align-items: center;
     gap: 0;
+}
+
+/* Justér links-panel på desktop så den flugter med tekst/logo */
+@media (min-width: 1024px) {
+    .link-panel {
+        /* Højre kant = højre kant på tw-passage (max-width: 820px) */
+        right: calc((100vw - 1120px) / 2);
+    }
 }
 
 .link-panel-inner {
@@ -495,6 +632,60 @@ tw-icon-back:hover {
 }
 
 /* ============================================
+   PRINT LAYOUT
+   ============================================ */
+@media print {
+    html, body {
+        height: auto !important;
+        overflow: visible !important;
+    }
+
+    tw-story {
+        height: auto !important;
+        overflow: visible !important;
+        padding-bottom: 0 !important;
+        background: #ffffff !important;
+    }
+
+    tw-passage {
+        padding: 40px 24px 24px;
+        max-width: 900px;
+    }
+
+    tw-passage::before {
+        position: static;
+        transform: none;
+        width: 100%;
+        max-width: none;
+        padding: 0;
+        height: auto;
+        background-position: left center;
+        background-size: contain;
+        margin-bottom: 16px;
+    }
+
+    tw-passage::after,
+    .link-panel,
+    .link-tab,
+    #google_translate_element,
+    .translate-btn {
+        display: none !important;
+    }
+
+    .print-controls {
+        position: static;
+        display: block;
+        width: 100%;
+        margin: 0 0 12px;
+        pointer-events: none;
+    }
+
+    .print-url {
+        display: inline-block;
+    }
+}
+
+/* ============================================
    METADATA
    Last updated: 2025-11-23 19:58:05 UTC
    Author: Do-Data
@@ -528,6 +719,49 @@ tw-icon-back:hover {
         subtree: true 
       });
     }
+  }
+ 
+ /* === Print-friendly layout === */
+  function initPrintSupport() {
+    const printButton = document.getElementById('printButton');
+    const storyElement = document.querySelector('tw-story');
+
+    const expandLayoutForPrint = function () {
+      document.documentElement.style.height = 'auto';
+      document.documentElement.style.overflow = 'visible';
+      document.body.style.height = 'auto';
+      document.body.style.overflow = 'visible';
+
+      if (storyElement) {
+        storyElement.style.height = 'auto';
+        storyElement.style.overflow = 'visible';
+      }
+    };
+
+    const restoreLayoutAfterPrint = function () {
+      document.documentElement.style.height = '';
+      document.documentElement.style.overflow = '';
+      document.body.style.height = '';
+      document.body.style.overflow = '';
+
+      if (storyElement) {
+        storyElement.style.height = '';
+        storyElement.style.overflow = '';
+      }
+    };
+
+    if (printButton) {
+      printButton.addEventListener('click', function () {
+        expandLayoutForPrint();
+        window.scrollTo({ top: 0, behavior: 'auto' });
+        setTimeout(function () {
+          window.print();
+        }, 20);
+      });
+    }
+
+    window.addEventListener('beforeprint', expandLayoutForPrint);
+    window.addEventListener('afterprint', restoreLayoutAfterPrint);
   }
 
   /* === Initialize Link Panel === */
@@ -615,6 +849,7 @@ tw-icon-back:hover {
   /* === Initialize when DOM is ready === */
   function init() {
     initScrollToTop();
+	initPrintSupport();
     createLinkPanel();
   }
 
