@@ -8,8 +8,6 @@ The pathway is part of the **Do Data – for a Greener Future** pilot under the
 ### Features
 
 - Interactive branching structure built with Twine  
-- Translation menu (English, Danish, Dutch, German, French)  
-- Fully responsive layout with custom branding  
 - Built-in Do Data Cook Book  
 - Designed for reuse and local adaptation by public authorities
 
